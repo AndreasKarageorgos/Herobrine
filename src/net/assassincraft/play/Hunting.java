@@ -8,17 +8,21 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
-public class Hunting {
+import net.assassincraft.play.NPC.Herobrine;
+import net.assassincraft.play.NPC.PacketSender;
+
+public class Hunting{
 	
 	private Random rand;
-	private int temp;
-	private int temp2;
+	private final Main plugin;
 	
-	
-	public Hunting() {
+	public Hunting(Main plugin) {
+		this.plugin = plugin;
 		rand = new Random();
 	}
+	
 	
 	private Sound sounds() {
 		switch(rand.nextInt(6)) {
@@ -39,6 +43,33 @@ public class Hunting {
 		
 	}
 	
+	private void jumpScare(Player player) {
+		Herobrine brine = new Herobrine(player);
+		brine.spawn();
+		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 1));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 3));
+		player.playSound(player.getLocation(),Sound.ENTITY_GHAST_HURT, 10, 0.2f);
+		PacketSender packets = new PacketSender(player, brine.getNpc());
+		packets.send();
+		
+		new BukkitRunnable() {
+			int count = 0;
+			public void run() {
+				if(count % 10 ==0) {
+					player.playSound(player.getLocation(),Sound.ENTITY_ENDER_DRAGON_SHOOT, 10, 0.3f);
+				}
+				if(count>=60) {
+					packets.remove();
+					cancel();
+				}
+				packets.update(player.getLocation());
+				count++;
+			}
+			
+			
+		}.runTaskTimer(plugin, 0, 0);
+		
+	}
 	
 	public void hunt(ArrayList<Player> players) {
 		int magicnumber = rand.nextInt(5); //increase this to make scares more rare.
@@ -50,8 +81,13 @@ public class Hunting {
 					Location location = player.getLocation();
 					
 					if(rand.nextInt(magicnumber+1)==magicnumber) {
-						player.playSound(location, sounds(), 10, 1);
-						System.out.println("[Herobrine]: Player: " + player.getName() + " got scared !");
+						if(rand.nextInt(10)==5) {
+							jumpScare(player);
+							System.out.println("[Herobrine]: Player: " + player.getName() + " got JumpScare !");
+						}else {
+							player.playSound(location, sounds(), 10, 1);
+							System.out.println("[Herobrine]: Player: " + player.getName() + " got scared !");
+						}
 					}
 				}else {
 					failed.add(player);
@@ -64,5 +100,6 @@ public class Hunting {
 		for(Player player : failed) {players.remove(player);}
 		
 	}
+	
 
 }

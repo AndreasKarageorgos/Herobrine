@@ -8,12 +8,12 @@ import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class herobrine implements CommandExecutor{
+public class Commands implements CommandExecutor{
 	
 	private Hunt hunt;
 	
-	public herobrine() {
-		hunt = new Hunt();
+	public Commands(Main main) {
+		hunt = new Hunt(main);
 		hunt.start();
 	}
 
@@ -36,11 +36,9 @@ public class herobrine implements CommandExecutor{
 			}else {
 				hunt.add(player);
 				player.sendMessage(ChatColor.RED + "Herobrine is hunting you !");
-				player.playSound(player.getLocation(), Sound.AMBIENT_BASALT_DELTAS_ADDITIONS, 10, 1);
+				player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 10, 0.3f);
 			}
-		}
-		
-		
+		}	
 		return false;
 	}
 	
