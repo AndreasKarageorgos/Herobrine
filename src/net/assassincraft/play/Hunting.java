@@ -21,11 +21,12 @@ public class Hunting{
 	public Hunting(Main plugin) {
 		this.plugin = plugin;
 		rand = new Random();
+		plugin.saveDefaultConfig();
 	}
 	
 	
 	private Sound sounds() {
-		switch(rand.nextInt(6)) {
+		switch(rand.nextInt(4)) {
 		case 0:
 			return Sound.ENTITY_GHAST_HURT;
 		case 1:
@@ -34,21 +35,20 @@ public class Hunting{
 			return Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR;
 		case 3:
 			return Sound.ENTITY_CREEPER_PRIMED;
-		case 4:
-			return Sound.ENTITY_ENDERMAN_STARE;
-		case 5:
-			return Sound.ENTITY_GENERIC_EXPLODE;
 		}
 		return null;
 		
 	}
 	
+	private void attack(Player player) {
+		player.damage(rand.nextInt(4)+1.0);
+	}
+	
 	private void jumpScare(Player player) {
 		Herobrine brine = new Herobrine(player);
 		brine.spawn();
-		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 1));
-		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 3));
-		player.playSound(player.getLocation(),Sound.ENTITY_GHAST_HURT, 10, 0.2f);
+		player.playSound(player.getLocation(),Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 10, 0.2f);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 2));
 		PacketSender packets = new PacketSender(player, brine.getNpc());
 		packets.send();
 		
@@ -56,7 +56,8 @@ public class Hunting{
 			int count = 0;
 			public void run() {
 				if(count % 10 ==0) {
-					player.playSound(player.getLocation(),Sound.ENTITY_ENDER_DRAGON_SHOOT, 10, 0.3f);
+					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 3));
+					player.playSound(player.getLocation(),Sound.ENTITY_ENDER_DRAGON_SHOOT, 10, 0.1f);
 				}
 				if(count>=60) {
 					packets.remove();
@@ -72,7 +73,7 @@ public class Hunting{
 	}
 	
 	public void hunt(ArrayList<Player> players) {
-		int magicnumber = rand.nextInt(5); //increase this to make scares more rare.
+		int magicnumber = rand.nextInt(plugin.getConfig().getInt("scare"));
 		ArrayList<Player> failed = new ArrayList<Player>();
 		
 		for(Player player : players) {
@@ -81,8 +82,9 @@ public class Hunting{
 					Location location = player.getLocation();
 					
 					if(rand.nextInt(magicnumber+1)==magicnumber) {
-						if(rand.nextInt(10)==5) {
+						if(rand.nextInt(plugin.getConfig().getInt("jumpscare"))==2) {
 							jumpScare(player);
+							attack(player);
 							System.out.println("[Herobrine]: Player: " + player.getName() + " got JumpScare !");
 						}else {
 							player.playSound(location, sounds(), 10, 1);

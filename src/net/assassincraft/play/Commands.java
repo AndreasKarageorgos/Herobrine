@@ -34,9 +34,10 @@ public class Commands implements CommandExecutor{
 				hunt.getPlayers().remove(player);
 				player.sendMessage(ChatColor.BLUE + "Herobrine is no longer hunting you !");
 			}else {
-				hunt.add(player);
 				player.sendMessage(ChatColor.RED + "Herobrine is hunting you !");
+				player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 5, 0.5f);
 				player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 10, 0.3f);
+				hunt.add(player);
 			}
 		}	
 		return false;

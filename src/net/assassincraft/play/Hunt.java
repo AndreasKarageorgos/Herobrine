@@ -16,6 +16,7 @@ public class Hunt{
 	
 	public Hunt(Main plugin) {
 		this.plugin = plugin;
+		this.plugin.saveDefaultConfig();
 		players = new ArrayList<Player>();
 		hunting = new Hunting(plugin);
 		rand = new Random();
@@ -35,7 +36,7 @@ public class Hunt{
 				
 			}
 			
-		}, 40, ((rand.nextInt(80)+30) * 4));
+		}, 40, ((rand.nextInt(plugin.getConfig().getInt("max")-plugin.getConfig().getInt("mix"))+plugin.getConfig().getInt("min")) * 4));
 	}
 	
 	public ArrayList<Player> getPlayers() {

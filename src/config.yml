@@ -1,0 +1,12 @@
+#author: Andreas Karageorgos
+#github: https://github.com/AndreasKarageorgos
+#plugin: https://github.com/AndreasKarageorgos/Herobrine
+#By increasing the scare players get lesser chance of getting scared. (Minimum is 0)
+scare: 5
+#By increasing the jumpscare players get lesser chance of getting JumpScare. (Minumus is 0)
+jumpscare: 5
+#
+#
+#The plugin randomly chooses the time bitween the min and max time for the next scare.
+min: 60
+max: 160
