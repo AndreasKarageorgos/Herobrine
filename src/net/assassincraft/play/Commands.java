@@ -1,5 +1,6 @@
 package net.assassincraft.play;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,8 +12,10 @@ import net.md_5.bungee.api.ChatColor;
 public class Commands implements CommandExecutor{
 	
 	private Hunt hunt;
+	private JumpScare jumpScare;
 	
 	public Commands(Main main) {
+		jumpScare = new JumpScare(main);
 		hunt = new Hunt(main);
 		hunt.start();
 	}
@@ -26,6 +29,21 @@ public class Commands implements CommandExecutor{
 			}
 			
 			Player player = (Player) sender;
+			
+			if(args.length >= 1 && (player.hasPermission("herobrine.others") || player.isOp())) {
+				for(Player target : Bukkit.getOnlinePlayers()) {
+					if(target.getName().equals(args[0])) {
+						player.sendMessage(ChatColor.BLUE + "Target got attacked !");
+						jumpScare.scare(target);
+						return true;
+					}
+				}
+				player.sendMessage(ChatColor.RED + "Target did not found !");
+				return true;
+			}else {
+				player.sendMessage(ChatColor.RED + "You don't have permission");
+			}
+			
 			if(!(player.hasPermission("herobrine.use") || player.isOp())) {
 				player.sendMessage(ChatColor.RED + "You don't have permission");
 				return true;

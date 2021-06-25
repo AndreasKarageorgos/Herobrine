@@ -6,22 +6,18 @@ import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import net.assassincraft.play.NPC.Herobrine;
-import net.assassincraft.play.NPC.PacketSender;
 
 public class Hunting{
 	
 	private Random rand;
 	private final Main plugin;
+	private JumpScare jumpScare;
 	
 	public Hunting(Main plugin) {
 		this.plugin = plugin;
 		rand = new Random();
 		plugin.saveDefaultConfig();
+		jumpScare = new JumpScare(plugin);
 	}
 	
 	
@@ -44,34 +40,6 @@ public class Hunting{
 		player.damage(rand.nextInt(4)+1.0);
 	}
 	
-	private void jumpScare(Player player) {
-		Herobrine brine = new Herobrine(player);
-		brine.spawn();
-		player.playSound(player.getLocation(),Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 10, 0.2f);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 2));
-		PacketSender packets = new PacketSender(player, brine.getNpc());
-		packets.send();
-		
-		new BukkitRunnable() {
-			int count = 0;
-			public void run() {
-				if(count % 10 ==0) {
-					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 3));
-					player.playSound(player.getLocation(),Sound.ENTITY_ENDER_DRAGON_SHOOT, 10, 0.1f);
-				}
-				if(count>=60) {
-					packets.remove();
-					cancel();
-				}
-				packets.update(player.getLocation());
-				count++;
-			}
-			
-			
-		}.runTaskTimer(plugin, 0, 0);
-		
-	}
-	
 	public void hunt(ArrayList<Player> players) {
 		int magicnumber = rand.nextInt(plugin.getConfig().getInt("scare"));
 		ArrayList<Player> failed = new ArrayList<Player>();
@@ -83,7 +51,7 @@ public class Hunting{
 					
 					if(rand.nextInt(magicnumber+1)==magicnumber) {
 						if(rand.nextInt(plugin.getConfig().getInt("jumpscare"))==0) {
-							jumpScare(player);
+							jumpScare.scare(player);
 							attack(player);
 							System.out.println("[Herobrine]: Player: " + player.getName() + " got JumpScare !");
 						}else {

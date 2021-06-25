@@ -1,6 +1,6 @@
 main: net.assassincraft.play.Main
 name: Herobrine
-version: 2.1
+version: 3.0
 author: AndreasKarageorgos
 website: https://github.com/AndreasKarageorgos/Herobrine
 description: This plugin will start plays sounds randomly to scare players and spawn Herobrine.
