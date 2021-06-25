@@ -1,3 +1,5 @@
+[![Discord](hthttps://discord.com/api/guilds/858018049105854474/widget.png)](https://discord.gg/tXDETKmdAj)
+
 # Herobrine
 
 This plugin is making random noises to scare players that want and sometimes spawns Herobrine in their vision with potion and sound effects to scare them.
