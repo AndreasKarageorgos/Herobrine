@@ -82,7 +82,7 @@ public class Hunting{
 					Location location = player.getLocation();
 					
 					if(rand.nextInt(magicnumber+1)==magicnumber) {
-						if(rand.nextInt(plugin.getConfig().getInt("jumpscare"))==2) {
+						if(rand.nextInt(plugin.getConfig().getInt("jumpscare"))==0) {
 							jumpScare(player);
 							attack(player);
 							System.out.println("[Herobrine]: Player: " + player.getName() + " got JumpScare !");
