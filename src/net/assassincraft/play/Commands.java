@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -13,8 +14,10 @@ public class Commands implements CommandExecutor{
 	
 	private Hunt hunt;
 	private JumpScare jumpScare;
+	private Main main;
 	
 	public Commands(Main main) {
+		this.main = main;
 		jumpScare = new JumpScare(main);
 		hunt = new Hunt(main);
 		hunt.start();
@@ -22,7 +25,7 @@ public class Commands implements CommandExecutor{
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(label.equalsIgnoreCase("herobrine")) {
+		if(label.equals("herobrine")) {
 			if(!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED + "Only players can execute this command");
 				return true;
@@ -30,7 +33,7 @@ public class Commands implements CommandExecutor{
 			
 			Player player = (Player) sender;
 			
-			if(args.length >= 1 && (player.hasPermission("herobrine.others") || player.isOp())) {
+			if(label.equals("herobrine") && args.length >= 1 && (player.hasPermission("herobrine.others") || player.isOp())) {
 				for(Player target : Bukkit.getOnlinePlayers()) {
 					if(target.getName().equals(args[0])) {
 						player.sendMessage(ChatColor.BLUE + "Target got attacked !");
@@ -40,7 +43,7 @@ public class Commands implements CommandExecutor{
 				}
 				player.sendMessage(ChatColor.RED + "Target did not found !");
 				return true;
-			}else {
+			}else if(args.length >=1){
 				player.sendMessage(ChatColor.RED + "You don't have permission");
 			}
 			
@@ -55,7 +58,17 @@ public class Commands implements CommandExecutor{
 				player.sendMessage(ChatColor.RED + "Herobrine is hunting you !");
 				player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 5, 0.5f);
 				player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 10, 0.3f);
-				hunt.add(player);
+				new BukkitRunnable() {
+					int count = 0;
+					public void run() {
+						if(count>=60) {
+							hunt.add(player);
+							cancel();
+						}
+						count++;
+					}
+					
+				}.runTaskTimer(main, 0, 0);
 			}
 		}	
 		return false;
