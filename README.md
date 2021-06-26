@@ -23,7 +23,7 @@ This plugin is making random noises to scare players that want and sometimes spa
 ## Permissions 
 
 * herobrine.use
-* herobrine.admin
+* herobrine.others
 
 ---
 
