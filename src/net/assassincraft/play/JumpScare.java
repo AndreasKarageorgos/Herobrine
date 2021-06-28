@@ -1,5 +1,7 @@
 package net.assassincraft.play;
 
+import java.util.Random;
+
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -13,10 +15,12 @@ import net.md_5.bungee.api.ChatColor;
 public class JumpScare {
 	
 	Main plugin;
+	Random rand;
 	
 	
 	public JumpScare(Main plugin) {
 		this.plugin = plugin;
+		rand = new Random();
 	}
 	
 	public void scare(Player player) {
@@ -42,6 +46,10 @@ public class JumpScare {
 					player.playSound(player.getLocation(),Sound.ENTITY_WITCH_CELEBRATE, 10, 0.2f);
 					player.sendMessage(ChatColor.GOLD + "HEROBRINE: " + ChatColor.RED +ChatColor.BOLD + "HAHAHA!");
 					packets.remove();
+					if(rand.nextInt(2)==0) {
+						MobAttack mb = new MobAttack();
+						mb.spawnRandMobs(player);
+					}
 					cancel();
 				}
 				packets.update(player.getLocation());
