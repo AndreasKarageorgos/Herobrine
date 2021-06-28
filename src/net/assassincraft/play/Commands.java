@@ -58,17 +58,7 @@ public class Commands implements CommandExecutor{
 				player.sendMessage(ChatColor.RED + "Herobrine is hunting you !");
 				player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 5, 0.5f);
 				player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 10, 0.3f);
-				new BukkitRunnable() {
-					int count = 0;
-					public void run() {
-						if(count>=60) {
-							hunt.add(player);
-							cancel();
-						}
-						count++;
-					}
-					
-				}.runTaskTimer(main, 0, 0);
+				hunt.add(player);
 			}
 		}	
 		return false;
