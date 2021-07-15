@@ -46,7 +46,7 @@ public class JumpScare {
 					player.playSound(player.getLocation(),Sound.ENTITY_WITCH_CELEBRATE, 10, 0.2f);
 					player.sendMessage(ChatColor.GOLD + "HEROBRINE: " + ChatColor.RED +ChatColor.BOLD + "HAHAHA!");
 					packets.remove();
-					if(rand.nextInt(2)==0) {
+					if(rand.nextInt(2)==0 && plugin.getConfig().getBoolean("spawn-mobs")) {
 						MobAttack mb = new MobAttack();
 						mb.spawnRandMobs(player);
 					}

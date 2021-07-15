@@ -50,13 +50,17 @@ public class Hunting{
 					Location location = player.getLocation();
 					
 					if(rand.nextInt(magicnumber+1)==magicnumber) {
-						if(rand.nextInt(plugin.getConfig().getInt("jumpscare"))==0) {
+						if(rand.nextInt(plugin.getConfig().getInt("jumpscare"))==0 && !(plugin.getConfig().getBoolean("disable-jumpscare"))) {
 							jumpScare.scare(player);
 							attack(player);
-							System.out.println("[Herobrine]: Player: " + player.getName() + " got JumpScare !");
+							if(plugin.getConfig().getBoolean("console-warnings")) {
+								System.out.println("[Herobrine]: Player: " + player.getName() + " got JumpScare !");
+								}
 						}else {
 							player.playSound(location, sounds(), 10, 1);
-							System.out.println("[Herobrine]: Player: " + player.getName() + " got scared !");
+							if(plugin.getConfig().getBoolean("console-warnings")) {
+								System.out.println("[Herobrine]: Player: " + player.getName() + " got scared !");
+							}
 						}
 					}
 				}else {

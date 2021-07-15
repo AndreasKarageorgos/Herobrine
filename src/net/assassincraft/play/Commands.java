@@ -6,7 +6,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -14,10 +13,10 @@ public class Commands implements CommandExecutor{
 	
 	private Hunt hunt;
 	private JumpScare jumpScare;
-	private Main main;
+	private Main plugin;
 	
 	public Commands(Main main) {
-		this.main = main;
+		this.plugin = main;
 		jumpScare = new JumpScare(main);
 		hunt = new Hunt(main);
 		hunt.start();
@@ -51,14 +50,16 @@ public class Commands implements CommandExecutor{
 				player.sendMessage(ChatColor.RED + "You don't have permission");
 				return true;
 			}
-			if(hunt.getPlayers().contains(player)) {
+			if(hunt.getPlayers().contains(player) && !(plugin.getConfig().getBoolean("scare-everyone"))) {
 				hunt.getPlayers().remove(player);
 				player.sendMessage(ChatColor.BLUE + "Herobrine is no longer hunting you !");
-			}else {
+			}else if(!(plugin.getConfig().getBoolean("scare-everyone"))){
 				player.sendMessage(ChatColor.RED + "Herobrine is hunting you !");
 				player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 5, 0.5f);
 				player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 10, 0.3f);
 				hunt.add(player);
+			}else {
+				player.sendMessage(ChatColor.RED + "Herobrine is already hunting this wolrd !");
 			}
 		}	
 		return false;
