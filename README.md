@@ -1,5 +1,5 @@
+This plugin is no longer supported.
 
-[![Discord](https://discord.com/api/guilds/858018049105854474/widget.png)](https://discord.gg/tXDETKmdAj)
 
 # Herobrine
 
